@@ -1,12 +1,13 @@
 <style>
     .print-format {
-        font-size: 9pt !important;
+        font-size: 12px !important;
         margin-top: 6mm !important;
         margin-left: 8mm !important;
         margin-right: 6mm !important;
         margin-bottom: 6mm !important;
     }
 
+    
     .print-format td {
         vertical-align: middle !important;
     }
@@ -44,11 +45,12 @@
         width: 100%;
         margin: 0 auto;
         border-collapse: collapse;
-        font-size: 10pt;
+        font-size: 12px;
+        font-family: Georgia, 'Liberation Serif', 'DejaVu Serif', 'Noto Serif', serif;
     }
 
     .table2 th {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .table2 th,
@@ -75,7 +77,10 @@
                 style="height: 80px; float:left; max-width: 200px;" />
         </div>
         <div style="margin-right:15px; margin-top:5px; text-align: right; float: right;">
-            <h1 style="font-weight: 900 !important;vertical-align: top;">{{ filters.company|upper }}</h1>
+            <h1 style="font-weight: 900 !important;vertical-align: top; font-family: Georgia, 'Liberation Serif', 'DejaVu Serif', 
+                      'Noto Serif', serif;">
+                      {{ filters.company|upper }}
+            </h1>
         </div>
         {% endif %}
         <div class="clearfix">
@@ -185,20 +190,23 @@
 
         <div style="float: left;">
             <h4
-                style="letter-spacing: 1px; text-transform: capitalize; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">
+                style="letter-spacing: 1px; text-transform: capitalize; font-family: Georgia, 'Liberation Serif', 'DejaVu Serif', 
+                'Noto Serif', serif;">
                 {{ report.report_name|upper }}<div class="fade_rule"></div>
             </h4>
         </div>
         <div style="float: right;">
             <h5
-                style="letter-spacing: 1px; text-transform: capitalize; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">
+                style="letter-spacing: 1px; text-transform: capitalize; font-family: Georgia, 'Liberation Serif', 'DejaVu Serif', 
+                'Noto Serif', serif; text-align: right; font-size: 12px;">
+
                 For: {% if filters.party[0] == filters.party_name[0] %}
                 <b>{{ filters.party_name[0] }}</b>
                 {% else %}
                 {{ _("Customer: ") }} <b>{{ filters.party[0] }}</b>
-                {% endif %}
-                | {{ _(filters.ageing_based_on) }} {{ _("Until") }} <span
-                    class="clearbackground">{{frappe.format(filters.report_date, 'Date') }}</span></p>
+                {% endif %}<br>
+                 {{ _(filters.ageing_based_on) }}{{ ":" }} <span
+                    class="">{{frappe.format(filters.report_date, 'Date') }}</span></p>
             </h5>
         </div>
         <table class="table2">
@@ -290,7 +298,7 @@
                     {% endif %}
                     {% endif %}
                     <td style="text-align: right;">
-                        <!-- {{ frappe.utils.fmt_money(data[i]["invoiced"], currency=data[i]["currency"]) }} -->
+                        <!-- {# {{ frappe.utils.fmt_money(data[i]["invoiced"], currency=data[i]["currency"]) }} #} -->
                         {{ frappe.utils.fmt_money(data[i]["invoiced"]) }}
                     </td>
                     {% if not(filters.show_future_payments) %}

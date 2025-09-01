@@ -1,6 +1,6 @@
 <style>
 	.print-format {
-		font-size: 8pt !important;
+		font-size: 12px !important;
 		margin-top: 6mm !important;
 		margin-left: 8mm !important;
 		margin-right: 6mm !important;
@@ -58,11 +58,12 @@
 		width: 100%;
 		margin: 0 auto;
 		border-collapse: collapse;
-		font-size: 10pt;
+		font-size: 12px;
+		font-family: Georgia, 'Liberation Serif', 'DejaVu Serif', 'Noto Serif', serif;
 	}
 
 	.table2 th {
-		font-size: 14px;
+		font-size: 12px;
 	}
 
 	.table2 th,
@@ -90,7 +91,10 @@
 				style="height: 80px; float:left; max-width: 200px;" />
 		</div>
 		<div style="margin-right:15px; margin-top:5px; text-align: right; float: right;">
-			<h1 style="font-weight: 900 !important;vertical-align: top;">{{ filters.company|upper }}</h1>
+			<h1 style="font-weight: 900 !important;vertical-align: top; font-family: Georgia, 'Liberation Serif', 'DejaVu Serif', 
+                      'Noto Serif', serif;">
+				{{ filters.company|upper }}
+			</h1>
 		</div>
 		{% endif %}
 
@@ -98,13 +102,15 @@
 		<div style="clear: both;">
 			<div style="float: left; width: 50%;">
 				<h4
-					style="letter-spacing: 1px; text-transform: capitalize; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">
+					style="letter-spacing: 1px; text-transform: capitalize; font-family: Georgia, 'Liberation Serif', 'DejaVu Serif', 
+                      'Noto Serif', serif;">
 					STATEMENT OF ACCOUNT<div class="fade_rule"></div>
 				</h4>
 			</div>
 			<div style="float: right; width: 50%; text-align: right;">
 				<h5
-					style="line-height:1em; text-transform: capitalize; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">
+					style="line-height:1em; text-transform: capitalize; font-family: Georgia, 'Liberation Serif', 'DejaVu Serif', 
+                      'Noto Serif', serif;">
 					For: {% if filters.party[0] == filters.party_name[0] %}
 					<b>{{ filters.party[0] }}</b>
 					{% else %}
@@ -207,7 +213,8 @@
 		{% if ageing %}
 		<div style="page-break-inside: avoid;">
 			<h4
-				style="letter-spacing: 1px; text-transform: capitalize; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">
+				style="letter-spacing: 1px; text-transform: capitalize; font-family: Georgia, 'Liberation Serif', 'DejaVu Serif', 
+                      'Noto Serif', serif;">
 				AGING SUMMARY<div class="fade_rule"></div>
 			</h4>
 			<table class="table" style="font-size: 12px; padding: 0px; margin: 0px;">
@@ -239,7 +246,8 @@
 		{% if terms_and_conditions %}
 		<div style="width: 50%; float: left;">
 			<h4
-				style="letter-spacing: 1px; text-transform: capitalize; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">
+				style="letter-spacing: 1px; text-transform: capitalize; font-family: Georgia, 'Liberation Serif', 'DejaVu Serif', 
+                'Noto Serif', serif;">
 				TERMS<div class="fade_rule"></div>
 			</h4>
 			<div style="font-size:10px !important;">
@@ -253,7 +261,8 @@
 			fields=['posting_date', 'mode_of_payment', 'reference_date', 'paid_amount', 'status']) %}
 			{% if pdc %}
 			<h4
-				style="letter-spacing: 1px; text-transform: capitalize; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">
+				style="letter-spacing: 1px; text-transform: capitalize; font-family: Georgia, 'Liberation Serif', 'DejaVu Serif', 
+                'Noto Serif', serif;">
 				FUTURE PAYMENTS<div class="fade_rule"></div>
 			</h4>
 			<table class="" style="font-size: 11px; padding: 0px; margin: 0px; color: gray !important; width: 95%;">
