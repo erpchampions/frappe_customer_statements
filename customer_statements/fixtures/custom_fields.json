@@ -1,0 +1,84 @@
+[
+ {
+  "dt": "Process Statement of Accounts",
+  "fieldname": "enable_multi_party_type",
+  "fieldtype": "Check",
+  "insert_after": "company",
+  "label": "Enable Multi-Party Type Statements",
+  "default": "0",
+  "description": "Enable support for Supplier, Employee, and other party types beyond Customer"
+ },
+ {
+  "dt": "Process Statement of Accounts",
+  "fieldname": "party_type_section",
+  "fieldtype": "Section Break",
+  "insert_after": "enable_multi_party_type",
+  "label": "Party Type Configuration",
+  "depends_on": "eval:doc.enable_multi_party_type",
+  "collapsible": 0
+ },
+ {
+  "dt": "Process Statement of Accounts",
+  "fieldname": "party_type",
+  "fieldtype": "Link",
+  "insert_after": "party_type_section",
+  "label": "Party Type",
+  "options": "DocType",
+  "default": "Customer",
+  "mandatory_depends_on": "eval:doc.enable_multi_party_type",
+  "depends_on": "eval:doc.enable_multi_party_type",
+  "description": "Select the type of party for statements (Customer, Supplier, Employee, etc.)"
+ },
+ {
+  "dt": "Process Statement of Accounts",
+  "fieldname": "party_collection",
+  "fieldtype": "Select",
+  "insert_after": "party_type",
+  "label": "Fetch Parties By",
+  "depends_on": "eval:doc.enable_multi_party_type",
+  "description": "Select how to filter and fetch parties"
+ },
+ {
+  "dt": "Process Statement of Accounts",
+  "fieldname": "collection_name",
+  "fieldtype": "Dynamic Link",
+  "insert_after": "party_collection",
+  "label": "Collection Name",
+  "options": "party_collection",
+  "depends_on": "eval:doc.enable_multi_party_type && doc.party_collection"
+ },
+ {
+  "dt": "Process Statement of Accounts",
+  "fieldname": "column_break_party",
+  "fieldtype": "Column Break",
+  "insert_after": "collection_name",
+  "depends_on": "eval:doc.enable_multi_party_type"
+ },
+ {
+  "dt": "Process Statement of Accounts",
+  "fieldname": "fetch_parties",
+  "fieldtype": "Button",
+  "insert_after": "column_break_party",
+  "label": "Fetch Parties",
+  "depends_on": "eval:doc.enable_multi_party_type"
+ },
+ {
+  "dt": "Process Statement of Accounts",
+  "fieldname": "parties_section",
+  "fieldtype": "Section Break",
+  "insert_after": "fetch_parties",
+  "label": "Parties",
+  "depends_on": "eval:doc.enable_multi_party_type",
+  "collapsible": 0
+ },
+ {
+  "dt": "Process Statement of Accounts",
+  "fieldname": "parties",
+  "fieldtype": "Table",
+  "insert_after": "parties_section",
+  "label": "Parties",
+  "options": "Process Statement of Accounts Party",
+  "mandatory_depends_on": "eval:doc.enable_multi_party_type",
+  "depends_on": "eval:doc.enable_multi_party_type"
+ }
+]

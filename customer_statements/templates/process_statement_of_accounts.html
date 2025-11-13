@@ -109,9 +109,14 @@
 			</div>
 			<div style="float: right; width: 50%; text-align: right;">
 				<h5
-					style="line-height:1em; text-transform: capitalize; font-family: Georgia, 'Liberation Serif', 'DejaVu Serif', 
+					style="line-height:1em; text-transform: capitalize; font-family: Georgia, 'Liberation Serif', 'DejaVu Serif',
                       'Noto Serif', serif;">
-					For: {% if filters.party[0] == filters.party_name[0] %}
+					{% if filters.party_type %}
+					{{ _(filters.party_type + ":") }}
+					{% else %}
+					{{ _("For:") }}
+					{% endif %}
+					{% if filters.party[0] == filters.party_name[0] %}
 					<b>{{ filters.party[0] }}</b>
 					{% else %}
 					<b>{{filters.party_name[0] }}</b>

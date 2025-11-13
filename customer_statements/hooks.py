@@ -5,11 +5,52 @@ app_description = "Better Statements"
 app_email = "info@cecypo.tech"
 app_license = "agpl-3.0"
 
-
+# Template overrides for Statement of Accounts
 process_soa_html = {
     "General Ledger": ["customer_statements/templates/process_statement_of_accounts.html"],
     "Accounts Receivable": ["customer_statements/templates/process_statement_of_accounts_accounts_receivable.html"],
 }
+
+# DocType Class Override
+override_doctype_class = {
+    "Process Statement of Accounts": "customer_statements.custom.process_statement_of_accounts.CustomProcessStatementOfAccounts"
+}
+
+# Whitelisted Method Overrides
+override_whitelisted_methods = {
+    "erpnext.accounts.doctype.process_statement_of_accounts.process_statement_of_accounts.fetch_customers":
+        "customer_statements.custom.process_statement_of_accounts.fetch_parties",
+}
+
+# Client Scripts
+doctype_js = {
+    "Process Statement of Accounts": "public/js/process_statement_of_accounts.js"
+}
+
+# Fixtures - Custom Fields and DocTypes
+fixtures = [
+    {
+        "dt": "Custom Field",
+        "filters": [
+            ["dt", "=", "Process Statement of Accounts"],
+            ["fieldname", "in", [
+                "enable_multi_party_type",
+                "party_type_section",
+                "party_type",
+                "party_collection",
+                "collection_name",
+                "column_break_party",
+                "fetch_parties",
+                "parties_section",
+                "parties"
+            ]]
+        ]
+    },
+    {
+        "dt": "DocType",
+        "filters": [["name", "=", "Process Statement of Accounts Party"]]
+    }
+]
 
 # Apps
 # ------------------
