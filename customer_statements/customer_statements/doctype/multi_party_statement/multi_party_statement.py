@@ -173,10 +173,16 @@ def get_html(doc, party_row, filters, res, columns, ageing, tax_id, presentation
 	# Render template
 	html = frappe.render_template(template, context)
 
-	# Wrap in print view base template
+	# Wrap in print view base template (same as ERPNext core)
+	from frappe.www.printview import get_print_style
+
 	html = frappe.render_template(
 		"frappe/www/printview.html",
-		{"body": html, "title": f"Statement - {party_row.party_name}"}
+		{
+			"body": html,
+			"css": get_print_style(),
+			"title": f"Statement For {party_row.party_name}"
+		}
 	)
 
 	return html
@@ -304,7 +310,9 @@ def get_report_pdf(docname, consolidated=True):
 	statement_dict = get_statement_dict(doc)
 
 	if not statement_dict:
-		frappe.throw(_("No statements found"))
+		frappe.throw(
+			_("No data found for any parties in the selected date range. Please check your filters and date range.")
+		)
 
 	if cint(consolidated):
 		# Consolidated PDF with page breaks
@@ -323,10 +331,8 @@ def get_statements_pdf(docname):
 	"""Generate combined PDF for download"""
 	import base64
 
+	# get_report_pdf will throw error if no data
 	pdf_content = get_report_pdf(docname, consolidated=True)
-
-	if not pdf_content:
-		frappe.throw(_("No data found for any parties in the selected date range"))
 
 	# Encode as base64
 	pdf_data = base64.b64encode(pdf_content).decode()
@@ -345,7 +351,9 @@ def get_print_html(docname):
 	statement_dict = get_statement_dict(doc)
 
 	if not statement_dict:
-		frappe.throw(_("No data found for any parties in the selected date range"))
+		frappe.throw(
+			_("No data found for any parties in the selected date range. Please check your filters and date range.")
+		)
 
 	# Join all HTML with page breaks
 	delimiter = '<div style="page-break-after: always;"></div>' if doc.include_break else ""
