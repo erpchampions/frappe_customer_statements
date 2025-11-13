@@ -27,9 +27,8 @@ doctype_js = {
     "Process Statement of Accounts": "public/js/process_statement_of_accounts.js"
 }
 
-# Fixtures - Custom Fields
-# Note: Child DocType "Process Statement of Accounts Party" is auto-installed from doctype folder
-fixtures = ["customer_statements/fixtures/custom_fields.json"]
+# Installation
+after_install = "customer_statements.install.after_install"
 
 # Apps
 # ------------------
