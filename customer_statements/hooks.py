@@ -113,7 +113,7 @@ after_install = "customer_statements.install.after_install"
 # Uninstallation
 # ------------
 
-# before_uninstall = "customer_statements.uninstall.before_uninstall"
+before_uninstall = "customer_statements.uninstall.before_uninstall"
 # after_uninstall = "customer_statements.uninstall.after_uninstall"
 
 # Integration Setup
