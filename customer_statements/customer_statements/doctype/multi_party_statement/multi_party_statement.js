@@ -10,9 +10,19 @@ frappe.ui.form.on('Multi Party Statement', {
 				}
 			};
 		});
+
+		// Initialize party collection options on load
+		if (frm.doc.party_type) {
+			update_party_collection_options(frm);
+		}
 	},
 
 	refresh: function(frm) {
+		// Update party collection options on refresh
+		if (frm.doc.party_type) {
+			update_party_collection_options(frm);
+		}
+
 		if (!frm.is_new()) {
 			frm.add_custom_button(__('Send Emails'), () => {
 				frm.call('send_statements').then(() => {

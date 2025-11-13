@@ -15,11 +15,12 @@ class MultiPartyStatement(Document):
 			if getdate(self.from_date) > getdate(self.to_date):
 				frappe.throw(_("From Date cannot be after To Date"))
 
+	def before_submit(self):
+		"""Validate and generate statements before submitting"""
+		# Only require parties on submit, not on save
 		if not self.parties:
 			frappe.throw(_("Please add at least one party"))
 
-	def before_submit(self):
-		"""Generate and send statements before submitting"""
 		self.send_statements()
 
 	def send_statements(self):
@@ -106,6 +107,10 @@ def get_statement_dict(doc, get_statement_dict=False):
 			# Skip if only header/footer rows (exactly 3 rows = no real transactions)
 			if len(res) == 3:
 				continue
+			# Clean up account names - remove quotes (matches ERPNext core)
+			for x in [0, -2, -1]:
+				if res[x].get("account"):
+					res[x]["account"] = res[x]["account"].replace("'", "")
 		elif doc.report == "Accounts Receivable":
 			filters = get_ar_filters(doc, party_row, presentation_currency)
 			columns, res = get_ar_soa(filters)
