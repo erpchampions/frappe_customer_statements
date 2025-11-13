@@ -11,25 +11,6 @@ process_soa_html = {
     "Accounts Receivable": ["customer_statements/templates/process_statement_of_accounts_accounts_receivable.html"],
 }
 
-# DocType Class Override
-override_doctype_class = {
-    "Process Statement of Accounts": "customer_statements.custom.process_statement_of_accounts.CustomProcessStatementOfAccounts"
-}
-
-# Whitelisted Method Overrides
-override_whitelisted_methods = {
-    "erpnext.accounts.doctype.process_statement_of_accounts.process_statement_of_accounts.fetch_customers":
-        "customer_statements.custom.process_statement_of_accounts.fetch_parties",
-}
-
-# Client Scripts
-doctype_js = {
-    "Process Statement of Accounts": "public/js/process_statement_of_accounts.js"
-}
-
-# Installation
-after_install = "customer_statements.install.after_install"
-
 # Apps
 # ------------------
 
@@ -113,7 +94,7 @@ after_install = "customer_statements.install.after_install"
 # Uninstallation
 # ------------
 
-before_uninstall = "customer_statements.uninstall.before_uninstall"
+# before_uninstall = "customer_statements.uninstall.before_uninstall"
 # after_uninstall = "customer_statements.uninstall.after_uninstall"
 
 # Integration Setup

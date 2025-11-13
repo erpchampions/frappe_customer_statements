@@ -1,0 +1,358 @@
+{
+ "actions": [],
+ "autoname": "field:title",
+ "creation": "2025-01-14 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "company",
+  "report",
+  "posting_date",
+  "column_break_basic",
+  "orientation",
+  "currency",
+  "letter_head",
+  "party_section",
+  "party_type",
+  "party_collection",
+  "party_collection_name",
+  "column_break_party",
+  "fetch_parties",
+  "parties_section",
+  "parties",
+  "date_range_section",
+  "from_date",
+  "to_date",
+  "column_break_dates",
+  "based_on_payment_terms",
+  "ageing_based_on",
+  "filters_section",
+  "account",
+  "cost_center",
+  "project",
+  "column_break_filters",
+  "ignore_exchange_rate_revaluation_journals",
+  "ignore_cr_dr_notes",
+  "display_section",
+  "show_remarks",
+  "show_net_values_in_party_account",
+  "include_break",
+  "column_break_display",
+  "include_ageing",
+  "categorize_by",
+  "email_section",
+  "enable_auto_email",
+  "frequency",
+  "filter_duration",
+  "start_date",
+  "column_break_email",
+  "primary_mandatory",
+  "cc_to"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "report",
+   "fieldtype": "Select",
+   "label": "Report",
+   "options": "General Ledger\nAccounts Receivable",
+   "reqd": 1,
+   "default": "General Ledger"
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "reqd": 1,
+   "default": "Today"
+  },
+  {
+   "fieldname": "column_break_basic",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "orientation",
+   "fieldtype": "Select",
+   "label": "Orientation",
+   "options": "Landscape\nPortrait",
+   "default": "Landscape"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "letter_head",
+   "fieldtype": "Link",
+   "label": "Letter Head",
+   "options": "Letter Head"
+  },
+  {
+   "fieldname": "party_section",
+   "fieldtype": "Section Break",
+   "label": "Party Configuration"
+  },
+  {
+   "fieldname": "party_type",
+   "fieldtype": "Link",
+   "label": "Party Type",
+   "options": "DocType",
+   "reqd": 1,
+   "default": "Customer"
+  },
+  {
+   "fieldname": "party_collection",
+   "fieldtype": "Select",
+   "label": "Fetch Parties By",
+   "options": ""
+  },
+  {
+   "fieldname": "party_collection_name",
+   "fieldtype": "Dynamic Link",
+   "label": "Collection Name",
+   "options": "party_collection",
+   "depends_on": "eval:doc.party_collection"
+  },
+  {
+   "fieldname": "column_break_party",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fetch_parties",
+   "fieldtype": "Button",
+   "label": "Fetch Parties"
+  },
+  {
+   "fieldname": "parties_section",
+   "fieldtype": "Section Break",
+   "label": "Parties"
+  },
+  {
+   "fieldname": "parties",
+   "fieldtype": "Table",
+   "label": "Parties",
+   "options": "Process Statement of Accounts Party",
+   "reqd": 1
+  },
+  {
+   "fieldname": "date_range_section",
+   "fieldtype": "Section Break",
+   "label": "Date Range"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_dates",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "based_on_payment_terms",
+   "fieldtype": "Check",
+   "label": "Based On Payment Terms",
+   "default": "0"
+  },
+  {
+   "fieldname": "ageing_based_on",
+   "fieldtype": "Select",
+   "label": "Ageing Based On",
+   "options": "Posting Date\nDue Date",
+   "default": "Due Date"
+  },
+  {
+   "fieldname": "filters_section",
+   "fieldtype": "Section Break",
+   "label": "Additional Filters"
+  },
+  {
+   "fieldname": "account",
+   "fieldtype": "Link",
+   "label": "Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "label": "Cost Center",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "column_break_filters",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ignore_exchange_rate_revaluation_journals",
+   "fieldtype": "Check",
+   "label": "Ignore Exchange Rate Revaluation Journals",
+   "default": "0"
+  },
+  {
+   "fieldname": "ignore_cr_dr_notes",
+   "fieldtype": "Check",
+   "label": "Ignore Credit/Debit Notes",
+   "default": "0"
+  },
+  {
+   "fieldname": "display_section",
+   "fieldtype": "Section Break",
+   "label": "Display Options"
+  },
+  {
+   "fieldname": "show_remarks",
+   "fieldtype": "Check",
+   "label": "Show Remarks",
+   "default": "0"
+  },
+  {
+   "fieldname": "show_net_values_in_party_account",
+   "fieldtype": "Check",
+   "label": "Show Net Values in Party Account",
+   "default": "0"
+  },
+  {
+   "fieldname": "include_break",
+   "fieldtype": "Check",
+   "label": "Include Page Break",
+   "default": "1"
+  },
+  {
+   "fieldname": "column_break_display",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "include_ageing",
+   "fieldtype": "Check",
+   "label": "Include Ageing Summary",
+   "default": "0"
+  },
+  {
+   "fieldname": "categorize_by",
+   "fieldtype": "Select",
+   "label": "Categorize By",
+   "options": "Categorize by Voucher (Consolidated)\nUncategorized",
+   "default": "Categorize by Voucher (Consolidated)"
+  },
+  {
+   "fieldname": "email_section",
+   "fieldtype": "Section Break",
+   "label": "Auto Email Settings"
+  },
+  {
+   "fieldname": "enable_auto_email",
+   "fieldtype": "Check",
+   "label": "Enable Auto Email",
+   "default": "0"
+  },
+  {
+   "fieldname": "frequency",
+   "fieldtype": "Select",
+   "label": "Frequency",
+   "options": "Weekly\nMonthly\nQuarterly",
+   "depends_on": "eval:doc.enable_auto_email",
+   "default": "Weekly"
+  },
+  {
+   "fieldname": "filter_duration",
+   "fieldtype": "Int",
+   "label": "Filter Duration (Months)",
+   "depends_on": "eval:doc.enable_auto_email",
+   "default": "1"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date",
+   "depends_on": "eval:doc.enable_auto_email"
+  },
+  {
+   "fieldname": "column_break_email",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "primary_mandatory",
+   "fieldtype": "Check",
+   "label": "Primary Email is Mandatory",
+   "depends_on": "eval:doc.enable_auto_email",
+   "default": "1"
+  },
+  {
+   "fieldname": "cc_to",
+   "fieldtype": "Table",
+   "label": "CC To",
+   "options": "Process Statement Of Accounts CC",
+   "depends_on": "eval:doc.enable_auto_email"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-01-14 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Customer Statements",
+ "name": "Multi Party Statement",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
