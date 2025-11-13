@@ -399,39 +399,44 @@ def get_generic_parties(party_type, collection_type, collection_name):
 def get_statements_pdf(docname):
 	"""Generate combined PDF for all party statements"""
 	import base64
-	from PyPDF2 import PdfMerger
 
 	doc = frappe.get_doc("Multi Party Statement", docname)
 
 	if not doc.parties:
 		frappe.throw(_("No parties found. Please fetch parties first."))
 
-	# Create merger for combining PDFs
-	merger = PdfMerger()
+	# Generate combined HTML for all parties
+	html_parts = []
 	has_data = False
 
-	# Generate PDF for each party
-	for party_row in doc.parties:
+	for idx, party_row in enumerate(doc.parties):
 		statement_dict = doc.get_statement_dict(party_row)
 
 		if statement_dict and statement_dict.get("data"):
-			pdf_content = doc.get_statement_pdf(statement_dict)
+			html = doc.get_statement_html(statement_dict)
+			html_parts.append(html)
 
-			# Add to merger
-			from io import BytesIO
-			merger.append(BytesIO(pdf_content))
+			# Add page break between statements (except for last one)
+			if idx < len(doc.parties) - 1 and doc.include_break:
+				html_parts.append('<div style="page-break-after: always;"></div>')
+
 			has_data = True
 
 	if not has_data:
 		frappe.throw(_("No data found for any parties in the selected date range"))
 
-	# Write merged PDF
-	output = BytesIO()
-	merger.write(output)
-	merger.close()
+	# Combine all HTML
+	combined_html = "\n".join(html_parts)
+
+	# Generate single PDF from combined HTML
+	from frappe.utils.pdf import get_pdf
+	pdf_content = get_pdf(combined_html, {
+		"orientation": doc.orientation,
+		"page-size": "A4"
+	})
 
 	# Encode as base64
-	pdf_data = base64.b64encode(output.getvalue()).decode()
+	pdf_data = base64.b64encode(pdf_content).decode()
 
 	return {
 		"pdf_data": pdf_data,
