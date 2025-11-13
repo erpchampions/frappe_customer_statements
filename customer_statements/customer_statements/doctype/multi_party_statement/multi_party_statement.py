@@ -281,44 +281,15 @@ def get_ageing(doc, party_row, presentation_currency):
 
 def get_party_tax_id(party_type, party):
 	"""Get tax ID for a party"""
-	try:
-		if party_type == "Customer":
-			return frappe.db.get_value("Customer", party, "tax_id")
-		elif party_type == "Supplier":
-			return frappe.db.get_value("Supplier", party, "tax_id")
-	except:
-		pass
+	if party_type in ["Customer", "Supplier"]:
+		return frappe.db.get_value(party_type, party, "tax_id") or ""
 	return ""
 
 
 def get_presentation_currency(doc, party_row):
 	"""Get presentation currency for the statement"""
-	if doc.currency:
-		return doc.currency
-
-	# Try to get from party account
-	try:
-		party_account = get_party_account(party_row.party_type, party_row.party, doc.company)
-		if party_account:
-			account_currency = frappe.db.get_value("Account", party_account, "account_currency")
-			if account_currency:
-				return account_currency
-	except:
-		pass
-
-	# Fallback to company currency
-	return get_company_currency(doc.company)
-
-
-def get_party_account(party_type, party, company):
-	"""Get party account"""
-	if party_type == "Customer":
-		from erpnext.accounts.party import get_party_account
-		return get_party_account(party_type, party, company)
-	elif party_type == "Supplier":
-		from erpnext.accounts.party import get_party_account
-		return get_party_account(party_type, party, company)
-	return None
+	# Use doc currency if specified, otherwise company currency
+	return doc.currency or get_company_currency(doc.company)
 
 
 @frappe.whitelist()
