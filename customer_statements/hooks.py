@@ -27,30 +27,9 @@ doctype_js = {
     "Process Statement of Accounts": "public/js/process_statement_of_accounts.js"
 }
 
-# Fixtures - Custom Fields and DocTypes
-fixtures = [
-    {
-        "dt": "Custom Field",
-        "filters": [
-            ["dt", "=", "Process Statement of Accounts"],
-            ["fieldname", "in", [
-                "enable_multi_party_type",
-                "party_type_section",
-                "party_type",
-                "party_collection",
-                "collection_name",
-                "column_break_party",
-                "fetch_parties",
-                "parties_section",
-                "parties"
-            ]]
-        ]
-    },
-    {
-        "dt": "DocType",
-        "filters": [["name", "=", "Process Statement of Accounts Party"]]
-    }
-]
+# Fixtures - Custom Fields
+# Note: Child DocType "Process Statement of Accounts Party" is auto-installed from doctype folder
+fixtures = ["customer_statements/fixtures/custom_fields.json"]
 
 # Apps
 # ------------------
