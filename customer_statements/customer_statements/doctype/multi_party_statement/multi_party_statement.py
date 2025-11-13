@@ -181,10 +181,51 @@ class MultiPartyStatement(Document):
 		)
 
 	def get_statement_pdf(self, statement_dict):
-		"""Generate PDF for statement"""
-		# This would use the template system to generate PDF
-		# For now, return placeholder
-		return b"PDF content"
+		"""Generate PDF for statement using Frappe's print system"""
+		from frappe.utils.pdf import get_pdf
+
+		html = self.get_statement_html(statement_dict)
+		pdf_content = get_pdf(html, {
+			"orientation": self.orientation,
+			"page-size": "A4"
+		})
+
+		return pdf_content
+
+	def get_statement_html(self, statement_dict):
+		"""Generate HTML for statement"""
+		from frappe.www.printview import get_print_style
+
+		# Get template based on report type
+		template_map = {
+			"General Ledger": "process_statement_of_accounts.html",
+			"Accounts Receivable": "process_statement_of_accounts_accounts_receivable.html"
+		}
+
+		template_name = template_map.get(self.report, "process_statement_of_accounts.html")
+		template_path = frappe.get_app_path("customer_statements", "templates", template_name)
+
+		# Prepare context
+		context = frappe._dict({
+			"filters": statement_dict.get("filters"),
+			"data": statement_dict.get("data"),
+			"report": frappe._dict({
+				"report_name": self.report,
+				"columns": statement_dict.get("columns")
+			}),
+			"letter_head": self.letter_head,
+			"ageing": statement_dict.get("ageing"),
+			"age_as_on": self.posting_date,
+			"statement_dict": statement_dict
+		})
+
+		# Render template
+		html = frappe.render_template(template_path, context)
+
+		# Add print styles
+		html = get_print_style() + html
+
+		return html
 
 
 @frappe.whitelist()
@@ -352,3 +393,78 @@ def get_generic_parties(party_type, collection_type, collection_name):
 		} for p in parties]
 	except Exception as e:
 		frappe.throw(_("Error fetching {0}: {1}").format(party_type, str(e)))
+
+
+@frappe.whitelist()
+def get_statements_pdf(docname):
+	"""Generate combined PDF for all party statements"""
+	import base64
+	from PyPDF2 import PdfMerger
+
+	doc = frappe.get_doc("Multi Party Statement", docname)
+
+	if not doc.parties:
+		frappe.throw(_("No parties found. Please fetch parties first."))
+
+	# Create merger for combining PDFs
+	merger = PdfMerger()
+	has_data = False
+
+	# Generate PDF for each party
+	for party_row in doc.parties:
+		statement_dict = doc.get_statement_dict(party_row)
+
+		if statement_dict and statement_dict.get("data"):
+			pdf_content = doc.get_statement_pdf(statement_dict)
+
+			# Add to merger
+			from io import BytesIO
+			merger.append(BytesIO(pdf_content))
+			has_data = True
+
+	if not has_data:
+		frappe.throw(_("No data found for any parties in the selected date range"))
+
+	# Write merged PDF
+	output = BytesIO()
+	merger.write(output)
+	merger.close()
+
+	# Encode as base64
+	pdf_data = base64.b64encode(output.getvalue()).decode()
+
+	return {
+		"pdf_data": pdf_data,
+		"filename": f"Statements_{doc.name}.pdf"
+	}
+
+
+@frappe.whitelist()
+def get_print_html(docname):
+	"""Generate combined HTML for printing all party statements"""
+	doc = frappe.get_doc("Multi Party Statement", docname)
+
+	if not doc.parties:
+		frappe.throw(_("No parties found. Please fetch parties first."))
+
+	html_parts = []
+	has_data = False
+
+	# Generate HTML for each party
+	for idx, party_row in enumerate(doc.parties):
+		statement_dict = doc.get_statement_dict(party_row)
+
+		if statement_dict and statement_dict.get("data"):
+			html = doc.get_statement_html(statement_dict)
+			html_parts.append(html)
+
+			# Add page break between statements (except for last one)
+			if idx < len(doc.parties) - 1 and doc.include_break:
+				html_parts.append('<div style="page-break-after: always;"></div>')
+
+			has_data = True
+
+	if not has_data:
+		frappe.throw(_("No data found for any parties in the selected date range"))
+
+	return "\n".join(html_parts)

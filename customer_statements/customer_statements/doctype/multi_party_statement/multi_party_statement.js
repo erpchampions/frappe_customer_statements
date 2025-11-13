@@ -21,8 +21,11 @@ frappe.ui.form.on('Multi Party Statement', {
 			});
 
 			frm.add_custom_button(__('Download PDF'), () => {
-				// Trigger PDF download
-				frappe.msgprint(__('PDF download feature coming soon'));
+				download_statements_pdf(frm);
+			});
+
+			frm.add_custom_button(__('Print'), () => {
+				print_statements(frm);
 			});
 		}
 	},
@@ -77,8 +80,54 @@ function update_party_collection_options(frm) {
 	frm.refresh_field('party_collection');
 }
 
+function download_statements_pdf(frm) {
+	frappe.call({
+		method: 'customer_statements.customer_statements.doctype.multi_party_statement.multi_party_statement.get_statements_pdf',
+		args: {
+			docname: frm.doc.name
+		},
+		callback: function(r) {
+			if (r.message) {
+				// Create download link
+				const a = document.createElement('a');
+				a.href = 'data:application/pdf;base64,' + r.message.pdf_data;
+				a.download = r.message.filename;
+				a.click();
+			}
+		}
+	});
+}
+
+function print_statements(frm) {
+	frappe.call({
+		method: 'customer_statements.customer_statements.doctype.multi_party_statement.multi_party_statement.get_print_html',
+		args: {
+			docname: frm.doc.name
+		},
+		callback: function(r) {
+			if (r.message) {
+				// Open print preview in new window
+				const print_window = window.open('', '_blank');
+				print_window.document.write(r.message);
+				print_window.document.close();
+				setTimeout(() => {
+					print_window.print();
+				}, 500);
+			}
+		}
+	});
+}
+
 // Child table events for Process Statement of Accounts Party
 frappe.ui.form.on('Process Statement of Accounts Party', {
+	parties_add: function(frm, cdt, cdn) {
+		// Auto-set party_type from parent when adding new row
+		const row = locals[cdt][cdn];
+		if (frm.doc.party_type) {
+			frappe.model.set_value(cdt, cdn, 'party_type', frm.doc.party_type);
+		}
+	},
+
 	party_type: function(frm, cdt, cdn) {
 		const row = locals[cdt][cdn];
 		row.party = '';
