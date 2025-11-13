@@ -29,7 +29,7 @@ frappe.ui.form.on('Process Statement of Accounts', {
 
 		// Clear existing data
 		frm.set_value('party_collection', '');
-		frm.set_value('collection_name', '');
+		frm.set_value('party_collection_name', '');
 		frm.clear_table('parties');
 		frm.refresh_field('parties');
 
@@ -43,7 +43,7 @@ frappe.ui.form.on('Process Statement of Accounts', {
 
 	party_collection: function(frm) {
 		// Clear collection name when collection type changes
-		frm.set_value('collection_name', '');
+		frm.set_value('party_collection_name', '');
 	},
 
 	fetch_parties: function(frm) {

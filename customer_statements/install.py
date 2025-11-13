@@ -11,6 +11,10 @@ def after_install():
 
 def create_custom_fields():
 	"""Create custom fields for multi-party type support"""
+	# Check if fields already exist
+	if frappe.db.exists("Custom Field", {"dt": "Process Statement of Accounts", "fieldname": "enable_multi_party_type"}):
+		return  # Fields already created
+
 	from frappe.custom.doctype.custom_field.custom_field import create_custom_fields as make_custom_fields
 
 	custom_fields = {
@@ -51,7 +55,7 @@ def create_custom_fields():
 				description="Select how to filter and fetch parties",
 			),
 			dict(
-				fieldname="collection_name",
+				fieldname="party_collection_name",
 				label="Collection Name",
 				fieldtype="Dynamic Link",
 				options="party_collection",
@@ -61,7 +65,7 @@ def create_custom_fields():
 			dict(
 				fieldname="column_break_party",
 				fieldtype="Column Break",
-				insert_after="collection_name",
+				insert_after="party_collection_name",
 				depends_on="eval:doc.enable_multi_party_type",
 			),
 			dict(

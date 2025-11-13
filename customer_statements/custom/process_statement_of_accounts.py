@@ -260,7 +260,7 @@ def fetch_parties(docname):
 
 	party_type = doc.party_type
 	collection_type = doc.party_collection
-	collection_name = doc.collection_name
+	collection_name = doc.party_collection_name
 
 	# Clear existing parties
 	doc.parties = []
