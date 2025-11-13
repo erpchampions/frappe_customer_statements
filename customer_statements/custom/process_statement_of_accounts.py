@@ -20,7 +20,7 @@ class CustomProcessStatementOfAccounts(ProcessStatementOfAccounts):
 		super().before_save()
 
 		# If multi-party mode enabled and party type is Customer, sync to customers table
-		if self.enable_multi_party_type and self.party_type == "Customer" and self.parties:
+		if self.get("enable_multi_party_type") and self.get("party_type") == "Customer" and self.get("parties"):
 			self.sync_parties_to_customers()
 
 	def sync_parties_to_customers(self):
@@ -43,11 +43,11 @@ class CustomProcessStatementOfAccounts(ProcessStatementOfAccounts):
 		Falls back to core logic if multi-party mode is disabled.
 		"""
 		# Fallback to core if multi-party disabled
-		if not self.enable_multi_party_type:
+		if not self.get("enable_multi_party_type"):
 			return super().get_statement_dict(customer=customer, customer_name=customer_name)
 
 		# Multi-party mode enabled
-		party_type = self.party_type or "Customer"
+		party_type = self.get("party_type") or "Customer"
 
 		# Use party parameters if provided, otherwise fallback to customer
 		if not party and customer:
@@ -251,16 +251,16 @@ def fetch_parties(docname):
 	doc = frappe.get_doc("Process Statement of Accounts", docname)
 
 	# Fallback to core if multi-party disabled
-	if not doc.enable_multi_party_type:
+	if not doc.get("enable_multi_party_type"):
 		return doc.fetch_customers()
 
 	# Validate required fields
-	if not doc.party_type:
+	if not doc.get("party_type"):
 		frappe.throw(_("Please select Party Type"))
 
-	party_type = doc.party_type
-	collection_type = doc.party_collection
-	collection_name = doc.party_collection_name
+	party_type = doc.get("party_type")
+	collection_type = doc.get("party_collection")
+	collection_name = doc.get("party_collection_name")
 
 	# Clear existing parties
 	doc.parties = []

@@ -96,4 +96,10 @@ def create_custom_fields():
 	}
 
 	make_custom_fields(custom_fields, update=True)
+	frappe.clear_cache(doctype="Process Statement of Accounts")
+
+	# Reload doctype to trigger database schema sync
+	frappe.reload_doctype("Process Statement of Accounts", force=True)
 	frappe.db.commit()
+
+	print("Custom fields created and schema synced successfully")
