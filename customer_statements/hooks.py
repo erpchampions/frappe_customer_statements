@@ -80,10 +80,9 @@ process_soa_html = {
 # ----------
 
 # add methods and filters to jinja environment
-# jinja = {
-# 	"methods": "customer_statements.utils.jinja_methods",
-# 	"filters": "customer_statements.utils.jinja_filters"
-# }
+jinja = {
+	"methods": "customer_statements.customer_statements.utils.jinja_methods",
+}
 
 # Installation
 # ------------

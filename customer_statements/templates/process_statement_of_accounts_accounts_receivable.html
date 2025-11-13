@@ -469,6 +469,73 @@
             </table>
             {% endif %}
         </div>
+
+        <!-- Signature Section -->
+        {% set sig_settings = frappe.call('customer_statements.customer_statements.utils.get_signature_settings') %}
+        {% if sig_settings.enabled %}
+        <div style="clear: both; margin-top: 60px; page-break-inside: avoid;">
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <td style="width: 33%; text-align: center; border: none; vertical-align: bottom; padding: 10px;">
+                        <div style="display: inline-block; min-width: 180px;">
+                            <div style="height: 50px;"></div>
+                            <div style="border-top: 1px solid #333; padding-top: 5px;">
+                                <strong>{{ sig_settings.prepared_by_label }}</strong>
+                            </div>
+                            {% if sig_settings.show_name_field %}
+                            <div style="font-size: 10px; color: #666; margin-top: 8px;">
+                                Name: ___________________
+                            </div>
+                            {% endif %}
+                            {% if sig_settings.show_date_field %}
+                            <div style="font-size: 10px; color: #666; margin-top: 3px;">
+                                Date: ___________________
+                            </div>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td style="width: 33%; text-align: center; border: none; vertical-align: bottom; padding: 10px;">
+                        <div style="display: inline-block; min-width: 180px;">
+                            <div style="height: 50px;"></div>
+                            <div style="border-top: 1px solid #333; padding-top: 5px;">
+                                <strong>{{ sig_settings.reviewed_by_label }}</strong>
+                            </div>
+                            {% if sig_settings.show_name_field %}
+                            <div style="font-size: 10px; color: #666; margin-top: 8px;">
+                                Name: ___________________
+                            </div>
+                            {% endif %}
+                            {% if sig_settings.show_date_field %}
+                            <div style="font-size: 10px; color: #666; margin-top: 3px;">
+                                Date: ___________________
+                            </div>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td style="width: 33%; text-align: center; border: none; vertical-align: bottom; padding: 10px;">
+                        <div style="display: inline-block; min-width: 180px;">
+                            <div style="height: 50px;"></div>
+                            <div style="border-top: 1px solid #333; padding-top: 5px;">
+                                <strong>{{ sig_settings.approved_by_label }}</strong>
+                            </div>
+                            {% if sig_settings.show_name_field %}
+                            <div style="font-size: 10px; color: #666; margin-top: 8px;">
+                                Name: ___________________
+                            </div>
+                            {% endif %}
+                            {% if sig_settings.show_date_field %}
+                            <div style="font-size: 10px; color: #666; margin-top: 3px;">
+                                Date: ___________________
+                            </div>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        {% endif %}
+        <!-- End Signature Section -->
+
         {% if letter_head.footer %}
         {{ letter_head.footer }}
         {% endif %}

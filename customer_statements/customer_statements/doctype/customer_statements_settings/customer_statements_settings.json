@@ -1,0 +1,96 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-11-13 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "signature_section",
+  "enable_signature_section",
+  "signature_label_prepared_by",
+  "signature_label_reviewed_by",
+  "signature_label_approved_by",
+  "column_break_1",
+  "signature_show_name_field",
+  "signature_show_date_field"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "enable_signature_section",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Enable Signature Section"
+  },
+  {
+   "fieldname": "signature_section",
+   "fieldtype": "Section Break",
+   "label": "Signature Section Settings"
+  },
+  {
+   "default": "Prepared By",
+   "depends_on": "enable_signature_section",
+   "fieldname": "signature_label_prepared_by",
+   "fieldtype": "Data",
+   "label": "Prepared By Label"
+  },
+  {
+   "default": "Reviewed By",
+   "depends_on": "enable_signature_section",
+   "fieldname": "signature_label_reviewed_by",
+   "fieldtype": "Data",
+   "label": "Reviewed By Label"
+  },
+  {
+   "default": "Approved By",
+   "depends_on": "enable_signature_section",
+   "fieldname": "signature_label_approved_by",
+   "fieldtype": "Data",
+   "label": "Approved By Label"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "depends_on": "enable_signature_section",
+   "fieldname": "signature_show_name_field",
+   "fieldtype": "Check",
+   "label": "Show Name Field"
+  },
+  {
+   "default": "1",
+   "depends_on": "enable_signature_section",
+   "fieldname": "signature_show_date_field",
+   "fieldtype": "Check",
+   "label": "Show Date Field"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-11-13 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Customer Statements",
+ "name": "Customer Statements Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
