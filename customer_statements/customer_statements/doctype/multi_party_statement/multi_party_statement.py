@@ -91,9 +91,6 @@ def get_statement_dict(doc, get_statement_dict=False):
 	statement_dict = {}
 
 	for party_row in doc.parties:
-		# Get tax ID if applicable
-		tax_id = get_party_tax_id(party_row.party_type, party_row.party)
-
 		# Get presentation currency
 		presentation_currency = get_presentation_currency(doc, party_row)
 
@@ -106,18 +103,20 @@ def get_statement_dict(doc, get_statement_dict=False):
 		if doc.report == "General Ledger":
 			filters = get_gl_filters(doc, party_row, presentation_currency)
 			columns, res = get_soa(filters)
+			# Skip if only header/footer rows (exactly 3 rows = no real transactions)
+			if len(res) == 3:
+				continue
 		elif doc.report == "Accounts Receivable":
 			filters = get_ar_filters(doc, party_row, presentation_currency)
 			columns, res = get_ar_soa(filters)
+			# Skip if no data
+			if not res:
+				continue
 		else:
 			continue
 
-		# Skip if no data
-		if not res or len(res) <= 2:  # Only header/footer rows
-			continue
-
 		# Generate HTML using ERPNext's template rendering
-		html = get_html(doc, party_row, filters, res, columns, ageing, tax_id, presentation_currency)
+		html = get_html(doc, party_row, filters, res, columns, ageing, presentation_currency)
 
 		if get_statement_dict:
 			statement_dict[party_row.party] = [html, ageing]
@@ -127,7 +126,7 @@ def get_statement_dict(doc, get_statement_dict=False):
 	return statement_dict
 
 
-def get_html(doc, party_row, filters, res, columns, ageing, tax_id, presentation_currency):
+def get_html(doc, party_row, filters, res, columns, ageing, presentation_currency):
 	"""
 	Render statement HTML using templates.
 	Follows ERPNext's exact template rendering pattern with hooks support.
@@ -154,7 +153,7 @@ def get_html(doc, party_row, filters, res, columns, ageing, tax_id, presentation
 			"footer": letter_head_doc.footer if letter_head_doc.footer else ""
 		}
 
-	# Prepare context for template
+	# Prepare context for template (matches ERPNext core exactly)
 	context = {
 		"filters": filters,
 		"data": res,
@@ -165,8 +164,6 @@ def get_html(doc, party_row, filters, res, columns, ageing, tax_id, presentation
 		"ageing": ageing,
 		"letter_head": letter_head,
 		"terms_and_conditions": "",  # Can be extended
-		"party_name": party_row.party_name,
-		"tax_id": tax_id,
 		"age_as_on": doc.posting_date
 	}
 
@@ -189,7 +186,7 @@ def get_html(doc, party_row, filters, res, columns, ageing, tax_id, presentation
 
 
 def get_gl_filters(doc, party_row, presentation_currency):
-	"""Get filters for General Ledger report"""
+	"""Get filters for General Ledger report - matches ERPNext core exactly"""
 	filters = frappe._dict({
 		"company": doc.company,
 		"from_date": doc.from_date,
@@ -199,8 +196,14 @@ def get_gl_filters(doc, party_row, presentation_currency):
 		"party_name": [party_row.party_name],
 		"group_by": "",
 		"presentation_currency": presentation_currency,
+		"currency": presentation_currency,
+		"tax_id": get_party_tax_id(party_row.party_type, party_row.party),
 		"show_cancelled_entries": 0,
-		"show_remarks": doc.show_remarks if hasattr(doc, 'show_remarks') else 0
+		"show_opening_entries": 0,  # CRITICAL: Prevents duplicate opening entries
+		"include_default_book_entries": 0,  # CRITICAL: Prevents book entry duplicates
+		"show_net_values_in_party_account": doc.get("show_net_values_in_party_account", 0),
+		"show_remarks": doc.get("show_remarks", 0),
+		"categorize_by": doc.get("categorize_by", "Categorize by Voucher (Consolidated)")
 	})
 
 	if doc.account:
@@ -212,14 +215,17 @@ def get_gl_filters(doc, party_row, presentation_currency):
 	if doc.project:
 		filters["project"] = doc.project
 
-	if doc.ignore_exchange_rate_revaluation_journals:
+	if doc.get("ignore_exchange_rate_revaluation_journals"):
 		filters["ignore_err"] = 1
+
+	if doc.get("ignore_cr_dr_notes"):
+		filters["ignore_cr_dr_notes"] = 1
 
 	return filters
 
 
 def get_ar_filters(doc, party_row, presentation_currency):
-	"""Get filters for Accounts Receivable report"""
+	"""Get filters for Accounts Receivable report - matches ERPNext core exactly"""
 	filters = frappe._dict({
 		"company": doc.company,
 		"report_date": doc.posting_date,
@@ -231,7 +237,8 @@ def get_ar_filters(doc, party_row, presentation_currency):
 		"party_type": party_row.party_type,
 		"party": [party_row.party],
 		"party_name": [party_row.party_name],
-		"presentation_currency": presentation_currency
+		"presentation_currency": presentation_currency,
+		"tax_id": get_party_tax_id(party_row.party_type, party_row.party)
 	})
 
 	if doc.account:
@@ -243,10 +250,10 @@ def get_ar_filters(doc, party_row, presentation_currency):
 	if doc.project:
 		filters["project"] = doc.project
 
-	if doc.based_on_payment_terms:
+	if doc.get("based_on_payment_terms"):
 		filters["based_on_payment_terms"] = 1
 
-	if doc.show_net_values_in_party_account:
+	if doc.get("show_net_values_in_party_account"):
 		filters["show_net_values_in_party_account"] = 1
 
 	return filters
