@@ -53,14 +53,17 @@ frappe.ui.form.on('Multi Party Statement', {
 			return;
 		}
 
-		frappe.call({
-			method: 'customer_statements.customer_statements.doctype.multi_party_statement.multi_party_statement.fetch_parties',
-			args: {
-				docname: frm.doc.name
-			},
-			callback: function(r) {
-				frm.reload_doc();
-			}
+		// Save document first to ensure party_type is persisted
+		frm.save().then(() => {
+			frappe.call({
+				method: 'customer_statements.customer_statements.doctype.multi_party_statement.multi_party_statement.fetch_parties',
+				args: {
+					docname: frm.doc.name
+				},
+				callback: function(r) {
+					frm.reload_doc();
+				}
+			});
 		});
 	},
 
