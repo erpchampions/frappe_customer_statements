@@ -1,0 +1,4 @@
+# Patches for customer_statements app
+# Add patch entries below in dotted path format
+# Example: customer_statements.patches.v0_0.sample_patch
+
