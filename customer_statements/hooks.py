@@ -5,7 +5,7 @@ app_description = "Better Statements"
 app_email = "info@cecypo.tech"
 app_license = "agpl-3.0"
 
-
+# Template overrides for Statement of Accounts
 process_soa_html = {
     "General Ledger": ["customer_statements/templates/process_statement_of_accounts.html"],
     "Accounts Receivable": ["customer_statements/templates/process_statement_of_accounts_accounts_receivable.html"],
@@ -94,7 +94,7 @@ process_soa_html = {
 # Uninstallation
 # ------------
 
-# before_uninstall = "customer_statements.uninstall.before_uninstall"
+before_uninstall = "customer_statements.uninstall.before_uninstall"
 # after_uninstall = "customer_statements.uninstall.after_uninstall"
 
 # Integration Setup
